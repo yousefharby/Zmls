@@ -1845,10 +1845,10 @@
         }
 
         // ── SCROLL REVEAL ──
-        const revObs = new IntersectionObserver(entries => {
+        window.revObs = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
         }, { threshold: .1 });
-        document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+        document.querySelectorAll('.reveal').forEach(el => window.revObs.observe(el));
 
         // ── EASTER EGG ──
         let seq = '';
@@ -1884,12 +1884,13 @@
         //   }
         // }
         const firebaseConfig = {
-            apiKey: "AIzaSyD-REPLACE-WITH-YOUR-KEY",
-            authDomain: "your-project.firebaseapp.com",
-            projectId: "your-project-id",
-            storageBucket: "your-project.appspot.com",
-            messagingSenderId: "000000000000",
-            appId: "1:000000000000:web:xxxxxxxxxxxxxxxx"
+            apiKey: "AIzaSyBtpVpU6ez1Y0tZhBY6JxLVCKvGKFb-QdQ",
+            authDomain: "juniors-2026.firebaseapp.com",
+            projectId: "juniors-2026",
+            storageBucket: "juniors-2026.firebasestorage.app",
+            messagingSenderId: "545225229005",
+            appId: "1:545225229005:web:cc5bece7bb752f30b39f84",
+            measurementId: "G-YKLHZEQWT0"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -1940,14 +1941,19 @@
         // ══ RENDER TEACHERS ══
         function renderTeachers() {
             const g = document.getElementById('teachersGrid');
+            if (!g) return;
+            g.innerHTML = '';
             TEACHERS.forEach(t => {
-                g.innerHTML += `
-                <div class="tch-card reveal">
+                const card = document.createElement('div');
+                card.className = 'tch-card reveal';
+                card.innerHTML = `
                     <div class="tch-av">${t.emoji}</div>
                     <div class="tch-subj">${t.subject}</div>
                     <div class="tch-name">${t.name}</div>
-                    <div class="tch-quote">"${t.quote}"</div>
-                </div>`;
+                    <div class="tch-quote">"${t.quote}"</div>`;
+                g.appendChild(card);
+                // Observe after appending so IntersectionObserver catches it
+                window.revObs.observe(card);
             });
         }
 
